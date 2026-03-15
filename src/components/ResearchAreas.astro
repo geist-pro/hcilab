@@ -29,14 +29,14 @@ const areas = [
 
 <section class="section section--alt" id="research" aria-labelledby="research-heading">
   <div class="container">
-    <p class="section-label">What we study</p>
-    <h2 class="section-title" id="research-heading">Research Areas</h2>
-    <p class="section-subtitle">
+    <p class="section-label reveal">What we study</p>
+    <h2 class="section-title reveal">Research Areas</h2>
+    <p class="section-subtitle reveal">
       Our work spans the spectrum from fundamental sensing to deployed systems,
       always centred on the human in the loop.
     </p>
 
-    <ul class="research-grid" role="list" aria-label="Research areas">
+    <ul class="research-grid stagger" role="list" aria-label="Research areas">
       {areas.map(area => (
         <li class="research-card">
           <h3 class="research-card__title">{area.title}</h3>

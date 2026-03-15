@@ -5,13 +5,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <section class="section section--alt" id="team" aria-labelledby="team-heading">
   <div class="container">
-    <p class="section-label">People</p>
-    <h2 class="section-title" id="team-heading">Our Team</h2>
-    <p class="section-subtitle">
+    <p class="section-label reveal">People</p>
+    <h2 class="section-title reveal">Our Team</h2>
+    <p class="section-subtitle reveal">
       Researchers, students, and collaborators shaping the future of human augmentation.
     </p>
 
-    <ul class="team-grid" role="list" aria-label="Team members">
+    <ul class="team-grid stagger" role="list" aria-label="Team members">
       {team.map(member => (
         <li class="team-card">
           <div class="team-card__photo-wrap">

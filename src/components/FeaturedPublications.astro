@@ -8,14 +8,14 @@ const featured = getFeaturedPublications(6);
 
 <section class="section" id="publications" aria-labelledby="pubs-heading">
   <div class="container">
-    <p class="section-label">Selected work</p>
-    <h2 class="section-title" id="pubs-heading">Featured Publications</h2>
-    <p class="section-subtitle">
+    <p class="section-label reveal">Selected work</p>
+    <h2 class="section-title reveal">Featured Publications</h2>
+    <p class="section-subtitle reveal">
       Recent work from CHI, IMWUT, UIST, and related venues.
     </p>
 
     {featured.length > 0 ? (
-      <ul class="featured-pubs-grid" role="list" aria-label="Featured publications">
+      <ul class="featured-pubs-grid stagger" role="list" aria-label="Featured publications">
         {featured.map(pub => (
           <li>
             <PublicationCard pub={pub} />

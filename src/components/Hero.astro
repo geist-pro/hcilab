@@ -5,21 +5,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <section class="hero" aria-label="Lab introduction">
   <div class="container hero__inner">
     <div class="hero__content">
-      <p class="section-label">Human Computer Interaction Lab</p>
-      <h1 class="hero__heading">
+      <p class="section-label reveal" style="animation-delay:0.05s">Human Computer Interaction Lab</p>
+      <h1 class="hero__heading reveal" style="animation-delay:0.15s">
         Augmenting<br/>
-        <span class="hero__the">the</span> <span class="hero__accent">Human</span> Experience
+        <span class="hero__the">the</span> <span class="hero__accent">Human</span> Experience<br/>
+        <span class="hero__typeword" aria-hidden="true"></span>
       </h1>
-      <p class="hero__sub">
+      <p class="hero__sub reveal" style="animation-delay:0.28s">
         We design, build, and study technologies that extend the human senses
         through wearable computing, extended reality, biosensing,
         and cognitive augmentation.
       </p>
-      <div class="hero__ctas">
+      <div class="hero__ctas reveal" style="animation-delay:0.38s">
         <a href="#research" class="btn btn--primary">Our Research</a>
         <a href={`${base}/publications/`} class="btn btn--outline">Publications</a>
       </div>
-      <div class="hero__stats" aria-label="Lab statistics">
+      <div class="hero__stats reveal" style="animation-delay:0.50s" aria-label="Lab statistics">
         <div class="hero__stat">
           <span class="hero__stat-num">230+</span>
           <span class="hero__stat-label">Publications</span>
@@ -35,7 +36,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </div>
 
-    <div class="hero__visual" aria-hidden="true">
+    <div class="hero__visual reveal-fade" aria-hidden="true" style="animation-delay:0.2s">
       <div class="hero__orb hero__orb--1"></div>
       <div class="hero__orb hero__orb--2"></div>
       <div class="hero__grid-dots"></div>
@@ -134,23 +135,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 .hero__orb {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.6;
+  filter: blur(64px);
 }
 
 .hero__orb--1 {
-  width: 320px; height: 320px;
-  background: radial-gradient(circle, #f7ddd2, #d97757 60%);
-  top: 20%; right: 5%;
-  animation: float 8s ease-in-out infinite;
+  width: 420px; height: 400px;
+  background: radial-gradient(ellipse at 42% 38%, #fce8da 0%, #d97757 45%, #c06438 80%, #8a3d1e 100%);
+  top: 5%; right: -2%;
+  opacity: 0.8;
+  animation: blob-drift 11s ease-in-out infinite,
+             blob-morph 7s ease-in-out infinite;
 }
 
 .hero__orb--2 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, #e8e2d9, #b5a8a0 60%);
-  top: 50%; right: 40%;
-  animation: float 10s ease-in-out infinite reverse;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, #ede8e0, #b5a8a0 70%);
+  top: 55%; right: 38%;
+  opacity: 0.45;
+  border-radius: 50%;
+  animation: orb-drift-2 13s ease-in-out infinite;
 }
 
 .hero__grid-dots {
@@ -162,13 +165,66 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.03); }
+/* Blob morphs through distinct organic shapes */
+@keyframes blob-morph {
+  0%   { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+  14%  { border-radius: 45% 55% 40% 60% / 60% 40% 65% 35%; }
+  28%  { border-radius: 55% 45% 65% 35% / 45% 55% 35% 65%; }
+  42%  { border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%; }
+  57%  { border-radius: 65% 35% 50% 50% / 40% 60% 45% 55%; }
+  71%  { border-radius: 50% 50% 35% 65% / 65% 35% 55% 45%; }
+  85%  { border-radius: 35% 65% 60% 40% / 50% 50% 40% 60%; }
+  100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+}
+
+/* Slow wander across the visual area */
+@keyframes blob-drift {
+  0%   { transform: translate(0px,   0px)  scale(1);    }
+  25%  { transform: translate(-18px, -32px) scale(1.05); }
+  50%  { transform: translate(14px,  -18px) scale(0.96); }
+  75%  { transform: translate(-10px,  22px) scale(1.03); }
+  100% { transform: translate(0px,   0px)  scale(1);    }
+}
+
+@keyframes orb-drift-2 {
+  0%   { transform: translate(0px,   0px)  scale(1);    }
+  40%  { transform: translate(-12px,  18px) scale(1.06); }
+  70%  { transform: translate(10px,  -14px) scale(0.95); }
+  100% { transform: translate(0px,   0px)  scale(1);    }
+}
+
+/* Typewriter word */
+.hero__typeword {
+  display: inline-block;
+  color: var(--color-muted);
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  min-height: 1.4em;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero__typeword.visible {
+  opacity: 1;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero__typeword::after {
+  content: '|';
+  margin-left: 2px;
+  color: var(--color-accent);
+  animation: cursor-blink 1s step-end infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__orb { animation: none; }
+  .hero__orb--1 { animation: none; border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+  .hero__orb--2 { animation: none; }
+  .hero__typeword::after { animation: none; }
 }
 
 @media (max-width: 768px) {
@@ -179,3 +235,50 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .hero__stats { flex-wrap: wrap; gap: var(--space-md); }
 }
 </style>
+
+<script>
+const words = [
+  'through wearables.',
+  'through biosensing.',
+  'through extended reality.',
+  'through cognitive computing.',
+  'through inclusive design.',
+];
+
+const el = document.querySelector<HTMLElement>('.hero__typeword');
+if (el) {
+  let wordIdx = 0;
+  let charIdx = 0;
+  let deleting = false;
+
+  // Start after hero fade-in
+  setTimeout(() => {
+    el.classList.add('visible');
+    tick();
+  }, 900);
+
+  function tick() {
+    const word = words[wordIdx];
+    if (!deleting) {
+      el!.textContent = word.slice(0, charIdx + 1);
+      charIdx++;
+      if (charIdx === word.length) {
+        deleting = true;
+        setTimeout(tick, 2200);
+      } else {
+        setTimeout(tick, 55);
+      }
+    } else {
+      el!.textContent = word.slice(0, charIdx - 1);
+      charIdx--;
+      if (charIdx === 0) {
+        deleting = false;
+        wordIdx = (wordIdx + 1) % words.length;
+        setTimeout(tick, 300);
+      } else {
+        setTimeout(tick, 32);
+      }
+    }
+  }
+}
+</script>

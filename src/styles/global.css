@@ -98,6 +98,46 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
+   Reveal animations (Intersection Observer driven)
+   ============================================================ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.visible {
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal-fade {
+  opacity: 0;
+}
+
+.reveal-fade.visible {
+  animation: fade-in 0.7s ease forwards;
+}
+
+/* Stagger children inside a .stagger parent */
+.stagger > * { opacity: 0; }
+
+.stagger.visible > *:nth-child(1)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s forwards; }
+.stagger.visible > *:nth-child(2)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.12s forwards; }
+.stagger.visible > *:nth-child(3)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.19s forwards; }
+.stagger.visible > *:nth-child(4)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.26s forwards; }
+.stagger.visible > *:nth-child(5)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.33s forwards; }
+.stagger.visible > *:nth-child(6)  { animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.40s forwards; }
+.stagger.visible > *:nth-child(n+7){ animation: fade-up 0.5s cubic-bezier(0.22,1,0.36,1) 0.47s forwards; }
+
+/* ============================================================
    Utility classes
    ============================================================ */
 .container {
