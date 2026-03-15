@@ -1,0 +1,56 @@
+---
+import { getFeaturedPublications } from '../data/publications';
+import PublicationCard from './PublicationCard.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const featured = getFeaturedPublications(6);
+---
+
+<section class="section" id="publications" aria-labelledby="pubs-heading">
+  <div class="container">
+    <p class="section-label">Selected work</p>
+    <h2 class="section-title" id="pubs-heading">Featured Publications</h2>
+    <p class="section-subtitle">
+      Recent work from CHI, IMWUT, UIST, and related venues.
+    </p>
+
+    {featured.length > 0 ? (
+      <ul class="featured-pubs-grid" role="list" aria-label="Featured publications">
+        {featured.map(pub => (
+          <li>
+            <PublicationCard pub={pub} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="featured-pubs-empty">Publications loading…</p>
+    )}
+
+    <div class="featured-pubs-cta">
+      <a href={`${base}/publications/`} class="btn btn--outline">
+        View all publications →
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+.featured-pubs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  list-style: none;
+}
+
+.featured-pubs-cta {
+  margin-top: var(--space-lg);
+  text-align: center;
+}
+
+.featured-pubs-empty {
+  margin-top: var(--space-lg);
+  color: var(--color-muted);
+  font-style: italic;
+}
+</style>

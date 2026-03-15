@@ -1,0 +1,358 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getPublications } from '../../data/publications';
+import type { Publication } from '../../data/publications';
+import '../../styles/global.css';
+
+const publications = getPublications();
+
+// Group by year
+const byYear = new Map<number, Publication[]>();
+for (const pub of publications) {
+  const list = byYear.get(pub.year) ?? [];
+  list.push(pub);
+  byYear.set(pub.year, list);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+
+// Prepare data for client-side search as JSON
+const pubsJson = JSON.stringify(
+  publications.map(p => ({
+    key: p.key,
+    title: p.title,
+    authors: p.authors,
+    venue: p.venue,
+    year: p.year,
+    titleLink: p.titleLink,
+    bibtexLink: p.bibtexLink,
+    audioLink: p.audioLink,
+  }))
+);
+---
+
+<Base
+  title="Publications — HCI Lab"
+  description="Full list of publications from the Human Computer Interaction Lab at Keio University SFC."
+>
+  <Nav />
+  <main id="main-content" class="pubs-page">
+    <div class="container">
+      <header class="pubs-header">
+        <p class="section-label">Research output</p>
+        <h1 class="pubs-title">Publications</h1>
+        <p class="pubs-count">
+          <span id="pub-count">{publications.length}</span> publications
+        </p>
+      </header>
+
+      <!-- Search -->
+      <div class="pubs-search-wrap" role="search">
+        <label for="pub-search" class="sr-only">Search publications by title, author, or venue</label>
+        <input
+          type="search"
+          id="pub-search"
+          class="pubs-search"
+          placeholder="Search by title, author, or venue…"
+          aria-controls="pub-results"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Live results count -->
+      <div
+        id="pub-results-status"
+        class="pubs-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></div>
+
+      <!-- Publications list (server-rendered) -->
+      <div id="pub-results">
+        {years.map(year => (
+          <section class="pub-year-group" data-year={year} aria-labelledby={`year-${year}`}>
+            <h2 class="pub-year-heading" id={`year-${year}`}>{year}</h2>
+            <ul class="pub-list" role="list">
+              {(byYear.get(year) ?? []).map(pub => (
+                <li class="pub-entry" data-key={pub.key} itemscope itemtype="https://schema.org/ScholarlyArticle">
+                  <div class="pub-entry__links" aria-label="Publication resources">
+                    <span class="pub-entry__year-badge">{pub.year}</span>
+                    {pub.titleLink && (
+                      <a href={pub.titleLink} class="pub-link pub-link--pdf" target="_blank" rel="noopener noreferrer" aria-label={`PDF: ${pub.title}`}>PDF</a>
+                    )}
+                    {pub.bibtexLink && (
+                      <a href={pub.bibtexLink} class="pub-link pub-link--bib" target="_blank" rel="noopener noreferrer" aria-label={`BibTeX: ${pub.title}`}>BibTeX</a>
+                    )}
+                    {pub.audioLink && (
+                      <a href={pub.audioLink} class="pub-link pub-link--audio" target="_blank" rel="noopener noreferrer" aria-label={`Audio summary: ${pub.title}`}>Audio</a>
+                    )}
+                  </div>
+                  <div class="pub-entry__body">
+                    <h3 class="pub-entry__title" itemprop="name">
+                      <a href={pub.titleLink} target="_blank" rel="noopener noreferrer" itemprop="url">
+                        {pub.title}
+                      </a>
+                    </h3>
+                    <p class="pub-entry__authors" itemprop="author">{pub.authors}</p>
+                    {pub.venue && (
+                      <p class="pub-entry__venue" itemprop="isPartOf">{pub.venue}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+
+      <p id="pub-no-results" class="pubs-no-results" hidden>
+        No publications match your search.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<!-- Client-side search data -->
+<script type="application/json" id="pub-data" set:html={pubsJson}></script>
+
+<script>
+interface PubData {
+  key: string;
+  title: string;
+  authors: string;
+  venue: string;
+  year: number;
+  titleLink: string;
+  bibtexLink: string;
+  audioLink: string | null;
+}
+
+const searchInput = document.getElementById('pub-search') as HTMLInputElement;
+const countEl = document.getElementById('pub-count')!;
+const statusEl = document.getElementById('pub-results-status')!;
+const resultsEl = document.getElementById('pub-results')!;
+const noResultsEl = document.getElementById('pub-no-results') as HTMLElement;
+const allEntries = Array.from(document.querySelectorAll<HTMLElement>('.pub-entry'));
+const allGroups = Array.from(document.querySelectorAll<HTMLElement>('.pub-year-group'));
+
+function normalize(s: string) { return s.toLowerCase(); }
+
+function filterPubs(query: string) {
+  const q = normalize(query.trim());
+  let visible = 0;
+
+  allEntries.forEach(entry => {
+    const key = entry.dataset.key ?? '';
+    // Get text content from title, authors, venue
+    const title = normalize(entry.querySelector('.pub-entry__title')?.textContent ?? '');
+    const authors = normalize(entry.querySelector('.pub-entry__authors')?.textContent ?? '');
+    const venue = normalize(entry.querySelector('.pub-entry__venue')?.textContent ?? '');
+    const matches = !q || title.includes(q) || authors.includes(q) || venue.includes(q);
+    entry.hidden = !matches;
+    if (matches) visible++;
+  });
+
+  // Hide year groups with no visible entries
+  allGroups.forEach(group => {
+    const anyVisible = Array.from(group.querySelectorAll<HTMLElement>('.pub-entry'))
+      .some(e => !e.hidden);
+    group.hidden = !anyVisible;
+  });
+
+  countEl.textContent = String(visible);
+  noResultsEl.hidden = visible > 0;
+  resultsEl.hidden = visible === 0;
+
+  if (q) {
+    statusEl.textContent = `Showing ${visible} publication${visible !== 1 ? 's' : ''} matching "${query}"`;
+  } else {
+    statusEl.textContent = '';
+  }
+}
+
+let debounceTimer: ReturnType<typeof setTimeout>;
+searchInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => filterPubs(searchInput.value), 150);
+});
+</script>
+
+<style>
+.pubs-page {
+  padding-bottom: var(--space-2xl);
+}
+
+.pubs-header {
+  padding-block: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-lg);
+}
+
+.pubs-title {
+  font-size: var(--text-h1);
+  font-family: var(--font-heading);
+  margin-bottom: 0.5rem;
+}
+
+.pubs-count {
+  color: var(--color-muted);
+  font-size: 1.125rem;
+}
+
+.pubs-search-wrap {
+  margin-bottom: var(--space-md);
+}
+
+.pubs-search {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.75rem 1rem;
+  font-size: var(--text-body);
+  font-family: var(--font-body);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.pubs-search:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.15);
+}
+
+.pubs-status {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
+  min-height: 1.25rem;
+}
+
+.pubs-no-results {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* Year groups */
+.pub-year-group {
+  margin-bottom: var(--space-xl);
+}
+
+.pub-year-heading {
+  font-size: var(--text-h2);
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
+  display: inline-block;
+}
+
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  list-style: none;
+}
+
+/* Single publication entry */
+.pub-entry {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.pub-entry:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.pub-entry__links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  min-width: 68px;
+}
+
+.pub-entry__year-badge {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.pub-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.pub-link:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.pub-link--pdf { border-color: #d97757; color: #d97757; background: var(--color-accent-light); }
+.pub-link--pdf:hover { background: #d97757; color: white; }
+
+.pub-entry__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+
+.pub-entry__title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.pub-entry__title a:hover { color: var(--color-accent); }
+
+.pub-entry__authors {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  margin-bottom: 0.2rem;
+  line-height: 1.5;
+}
+
+.pub-entry__venue {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .pub-entry {
+    grid-template-columns: 1fr;
+  }
+  .pub-entry__links {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+</style>

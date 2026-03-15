@@ -1,0 +1,100 @@
+---
+const areas = [
+  {
+    icon: '⌚',
+    title: 'Wearable Computing',
+    description: 'Embedding intelligence into everyday objects worn on the body — glasses, e-textiles, on-skin electronics.',
+  },
+  {
+    icon: '🥽',
+    title: 'Extended Reality',
+    description: 'Designing XR/VR/AR systems that enhance perception, enable new social interactions, and recreate experiences.',
+  },
+  {
+    icon: '💓',
+    title: 'Biosensing & Physiology',
+    description: 'Capturing and interpreting physiological signals — EMG, EEG, heart rate, eye-tracking — for human-centered feedback.',
+  },
+  {
+    icon: '🧠',
+    title: 'Cognitive Augmentation',
+    description: 'AI and sensor-driven systems that support attention, memory, learning, and mental well-being.',
+  },
+  {
+    icon: '♿',
+    title: 'Inclusive Technology',
+    description: 'Designing with and for people of all abilities — assistive technologies, accessible making, older adults.',
+  },
+  {
+    icon: '🤖',
+    title: 'Human–Robot Interaction',
+    description: 'Soft robotic companions and floating drones that create affective, physical, and expressive interactions.',
+  },
+];
+---
+
+<section class="section section--alt" id="research" aria-labelledby="research-heading">
+  <div class="container">
+    <p class="section-label">What we study</p>
+    <h2 class="section-title" id="research-heading">Research Areas</h2>
+    <p class="section-subtitle">
+      Our work spans the spectrum from fundamental sensing to deployed systems —
+      always centred on the human in the loop.
+    </p>
+
+    <ul class="research-grid" role="list" aria-label="Research areas">
+      {areas.map(area => (
+        <li class="research-card">
+          <span class="research-card__icon" aria-hidden="true">{area.icon}</span>
+          <h3 class="research-card__title">{area.title}</h3>
+          <p class="research-card__desc">{area.description}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.research-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  cursor: default;
+}
+
+.research-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.research-card__icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+  line-height: 1;
+}
+
+.research-card__title {
+  font-size: var(--text-h3);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.research-card__desc {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+</style>

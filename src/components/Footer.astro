@@ -1,0 +1,141 @@
+---
+const year = new Date().getFullYear();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href={`${base}/`} class="footer__logo">
+        <span aria-hidden="true">⬡</span> HCI Lab
+      </a>
+      <p class="footer__affiliation">
+        Human Computer Interaction Lab<br />
+        Keio University SFC · Fujisawa, Japan
+      </p>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer navigation">
+      <h3 class="footer__nav-title">Navigate</h3>
+      <ul role="list">
+        <li><a href="#research">Research</a></li>
+        <li><a href={`${base}/publications/`}>Publications</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#apply">Apply</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__links">
+      <h3 class="footer__nav-title">Connect</h3>
+      <ul role="list">
+        <li>
+          <a href="https://github.com/geist-pro/hcilab" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a href="https://scholar.google.com/citations?user=bKT-bNEAAAAJ" target="_blank" rel="noopener noreferrer">
+            Google Scholar
+          </a>
+        </li>
+        <li>
+          <a href="https://kaikunze.de" target="_blank" rel="noopener noreferrer">
+            PI Website
+          </a>
+        </li>
+        <li>
+          <a href="mailto:kunze@sfc.keio.ac.jp">
+            Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <div class="container">
+      <p>&copy; {year} Human Computer Interaction Lab, Keio University SFC. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer {
+  background: var(--color-text);
+  color: #ccc;
+  margin-top: auto;
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-xl);
+  padding-block: var(--space-xl);
+}
+
+.footer__logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: var(--space-sm);
+}
+
+.footer__logo span { color: var(--color-accent); }
+
+.footer__affiliation {
+  font-size: var(--text-small);
+  color: #888;
+  line-height: 1.7;
+}
+
+.footer__nav-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: var(--space-sm);
+}
+
+.footer__nav ul,
+.footer__links ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer__nav a,
+.footer__links a {
+  font-size: 0.9375rem;
+  color: #bbb;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer__nav a:hover,
+.footer__links a:hover { color: var(--color-accent); }
+
+.footer__bottom {
+  border-top: 1px solid #2a2a2a;
+  padding-block: var(--space-md);
+}
+
+.footer__bottom p {
+  font-size: var(--text-small);
+  color: #666;
+}
+
+@media (max-width: 640px) {
+  .footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer__brand { grid-column: 1 / -1; }
+}
+</style>

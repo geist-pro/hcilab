@@ -1,0 +1,150 @@
+---
+import type { Publication } from '../data/publications';
+
+export interface Props {
+  pub: Publication;
+  compact?: boolean;
+}
+
+const { pub, compact = false } = Astro.props;
+
+// Shorten author list: show first 3 authors + "et al."
+function formatAuthors(authors: string): string {
+  const parts = authors.split(' and ').map(a => {
+    const [last, first] = a.split(',').map(s => s.trim());
+    return first ? `${first.charAt(0)}. ${last}` : last;
+  });
+  if (parts.length > 3) return parts.slice(0, 3).join(', ') + ' et al.';
+  return parts.join(', ');
+}
+---
+
+<article class:list={['pub-card', { 'pub-card--compact': compact }]} itemscope itemtype="https://schema.org/ScholarlyArticle">
+  <div class="pub-card__meta">
+    <span class="pub-card__year">{pub.year}</span>
+    {pub.venue && <span class="pub-card__venue" itemprop="isPartOf">{pub.venue}</span>}
+  </div>
+
+  <h3 class="pub-card__title" itemprop="name">
+    <a href={pub.titleLink} target="_blank" rel="noopener noreferrer" itemprop="url">
+      {pub.title}
+    </a>
+  </h3>
+
+  {!compact && (
+    <p class="pub-card__authors" itemprop="author">{formatAuthors(pub.authors)}</p>
+  )}
+
+  <div class="pub-card__links" aria-label="Publication resources">
+    {pub.titleLink && (
+      <a href={pub.titleLink} class="pub-card__link pub-card__link--pdf" target="_blank" rel="noopener noreferrer" aria-label={`Download PDF for ${pub.title}`}>
+        PDF
+      </a>
+    )}
+    {pub.bibtexLink && (
+      <a href={pub.bibtexLink} class="pub-card__link pub-card__link--bib" target="_blank" rel="noopener noreferrer" aria-label={`BibTeX for ${pub.title}`}>
+        BibTeX
+      </a>
+    )}
+    {pub.audioLink && (
+      <a href={pub.audioLink} class="pub-card__link pub-card__link--audio" target="_blank" rel="noopener noreferrer" aria-label={`Audio summary for ${pub.title}`}>
+        Audio
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+.pub-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.pub-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.pub-card__meta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pub-card__year {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-small);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.pub-card__venue {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.pub-card__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+
+.pub-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pub-card__title a:hover { color: var(--color-accent); }
+
+.pub-card__authors {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.pub-card__links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.pub-card__link {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+
+.pub-card__link:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.pub-card__link--pdf { border-color: #d97757; color: #d97757; background: var(--color-accent-light); }
+.pub-card__link--pdf:hover { background: #d97757; color: white; }
+</style>

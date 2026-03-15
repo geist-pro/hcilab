@@ -1,0 +1,177 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="hero" aria-label="Lab introduction">
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="section-label">Keio University SFC</p>
+      <h1 class="hero__heading">
+        Augmenting<br/>
+        <span class="hero__accent">Human</span> Experience
+      </h1>
+      <p class="hero__sub">
+        We design, build, and study technologies that extend the human senses —
+        through wearable computing, extended reality, biosensing,
+        and cognitive augmentation.
+      </p>
+      <div class="hero__ctas">
+        <a href="#research" class="btn btn--primary">Our Research</a>
+        <a href={`${base}/publications/`} class="btn btn--outline">Publications</a>
+      </div>
+      <div class="hero__stats" aria-label="Lab statistics">
+        <div class="hero__stat">
+          <span class="hero__stat-num">230+</span>
+          <span class="hero__stat-label">Publications</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">2010</span>
+          <span class="hero__stat-label">Founded</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">CHI · IMWUT · UIST</span>
+          <span class="hero__stat-label">Top venues</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <div class="hero__orb hero__orb--1"></div>
+      <div class="hero__orb hero__orb--2"></div>
+      <div class="hero__grid-dots"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-2xl);
+  padding-top: calc(var(--space-2xl) + 2rem);
+  background: var(--color-bg);
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.hero__heading {
+  font-size: var(--text-hero);
+  margin-bottom: var(--space-md);
+  line-height: 1.1;
+}
+
+.hero__accent {
+  color: var(--color-accent);
+  position: relative;
+  display: inline-block;
+}
+
+.hero__accent::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0.05em;
+  height: 0.08em;
+  background: var(--color-accent);
+  opacity: 0.3;
+  border-radius: 2px;
+}
+
+.hero__sub {
+  font-size: clamp(1.05rem, 0.96rem + 0.4vw, 1.25rem);
+  color: var(--color-muted);
+  max-width: 480px;
+  margin-bottom: var(--space-lg);
+  line-height: 1.7;
+}
+
+.hero__ctas {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+}
+
+.hero__stats {
+  display: flex;
+  gap: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hero__stat-num {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.hero__stat-label {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+/* Decorative visual */
+.hero__visual {
+  position: relative;
+  height: 480px;
+}
+
+.hero__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+}
+
+.hero__orb--1 {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, #f7ddd2, #d97757 60%);
+  top: 20%; right: 5%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.hero__orb--2 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, #e8e2d9, #b5a8a0 60%);
+  top: 50%; right: 40%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.hero__grid-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.03); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__orb { animation: none; }
+}
+
+@media (max-width: 768px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .hero__visual { display: none; }
+  .hero__stats { flex-wrap: wrap; gap: var(--space-md); }
+}
+</style>

@@ -1,0 +1,156 @@
+---
+import { team } from '../data/team';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="section section--alt" id="team" aria-labelledby="team-heading">
+  <div class="container">
+    <p class="section-label">People</p>
+    <h2 class="section-title" id="team-heading">Our Team</h2>
+    <p class="section-subtitle">
+      Researchers, students, and collaborators shaping the future of human augmentation.
+    </p>
+
+    <ul class="team-grid" role="list" aria-label="Team members">
+      {team.map(member => (
+        <li class="team-card">
+          <div class="team-card__photo-wrap">
+            {member.photo ? (
+              <img
+                src={`${base}${member.photo}`}
+                alt={`Photo of ${member.name}`}
+                class="team-card__photo"
+                width="120"
+                height="120"
+                loading="lazy"
+              />
+            ) : (
+              <div class="team-card__photo team-card__photo--placeholder" aria-hidden="true">
+                {member.name.charAt(0)}
+              </div>
+            )}
+          </div>
+          <div class="team-card__info">
+            {member.url ? (
+              <a href={member.url} target="_blank" rel="noopener noreferrer" class="team-card__name">
+                {member.name}
+              </a>
+            ) : (
+              <span class="team-card__name">{member.name}</span>
+            )}
+            <span class="team-card__role">{member.role}</span>
+          </div>
+        </li>
+      ))}
+
+      {/* Placeholder slots */}
+      {Array.from({ length: Math.max(0, 5 - team.length) }).map((_, i) => (
+        <li class="team-card team-card--placeholder" aria-hidden="true">
+          <div class="team-card__photo-wrap">
+            <div class="team-card__photo team-card__photo--placeholder">?</div>
+          </div>
+          <div class="team-card__info">
+            <span class="team-card__name" style="opacity:0.3">Coming soon</span>
+            <span class="team-card__role" style="opacity:0.3">—</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="team-note">
+      To add team members, edit <code>src/data/team.ts</code> and add photos to <code>public/team/</code>.
+    </p>
+  </div>
+</section>
+
+<style>
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  list-style: none;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  width: 140px;
+}
+
+.team-card--placeholder { opacity: 0.4; }
+
+.team-card__photo-wrap {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-border);
+  transition: border-color var(--transition);
+  flex-shrink: 0;
+}
+
+.team-card:hover .team-card__photo-wrap {
+  border-color: var(--color-accent);
+}
+
+.team-card__photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.team-card__photo--placeholder {
+  width: 100%; height: 100%;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.team-card__name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.team-card__name:hover { color: var(--color-accent); }
+
+.team-card__role {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.team-note {
+  margin-top: var(--space-lg);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  display: inline-block;
+}
+
+.team-note code {
+  font-family: 'Menlo', monospace;
+  font-size: 0.8125rem;
+  background: var(--color-accent-light);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  color: var(--color-accent);
+}
+</style>
