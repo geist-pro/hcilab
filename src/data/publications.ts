@@ -111,12 +111,18 @@ export function getPublications(): Publication[] {
   return pubs;
 }
 
-/** Return publications from top venues (CHI, IMWUT, UIST, etc.) — most recent N */
+/** Return full-paper publications from top venues (CHI, IMWUT, UIST, TOCHI, etc.) — most recent N.
+ *  Excludes companion proceedings, adjunct, posters, workshops, demos, and extended abstracts.
+ */
 export function getFeaturedPublications(n = 6): Publication[] {
-  const topVenues = ['chi', 'imwut', 'uist', 'tei', 'iswc', 'ubicomp', 'pervasive'];
+  const topVenues = ['chi conference', 'proceedings of the acm on interactive, mobile', 'imwut', 'uist', 'tochi', 'ubicomp', 'iswc', 'pervasive computing'];
+  const excludeTerms = ['companion', 'adjunct', 'poster', 'workshop', 'demo', 'extended abstract', 'late-breaking', 'emerging tech', 'siggraph', 'symposium on eye', 'mensch', 'abstract'];
   const all = getPublications();
-  const featured = all.filter(p =>
-    topVenues.some(v => p.venue.toLowerCase().includes(v))
-  );
+  const featured = all.filter(p => {
+    const v = p.venue.toLowerCase();
+    const isTopVenue = topVenues.some(t => v.includes(t));
+    const isExcluded = excludeTerms.some(t => v.includes(t));
+    return isTopVenue && !isExcluded;
+  });
   return featured.slice(0, n);
 }

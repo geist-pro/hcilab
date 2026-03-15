@@ -1,32 +1,26 @@
 ---
 const areas = [
   {
-    icon: '⌚',
     title: 'Wearable Computing',
-    description: 'Embedding intelligence into everyday objects worn on the body — glasses, e-textiles, on-skin electronics.',
+    description: 'Embedding intelligence into everyday objects worn on the body: glasses, e-textiles, on-skin electronics.',
   },
   {
-    icon: '🥽',
     title: 'Extended Reality',
     description: 'Designing XR/VR/AR systems that enhance perception, enable new social interactions, and recreate experiences.',
   },
   {
-    icon: '💓',
     title: 'Biosensing & Physiology',
-    description: 'Capturing and interpreting physiological signals — EMG, EEG, heart rate, eye-tracking — for human-centered feedback.',
+    description: 'Capturing and interpreting physiological signals (EMG, EEG, heart rate, eye-tracking) for human-centered feedback.',
   },
   {
-    icon: '🧠',
     title: 'Cognitive Augmentation',
     description: 'AI and sensor-driven systems that support attention, memory, learning, and mental well-being.',
   },
   {
-    icon: '♿',
     title: 'Inclusive Technology',
-    description: 'Designing with and for people of all abilities — assistive technologies, accessible making, older adults.',
+    description: 'Designing with and for people of all abilities: assistive technologies, accessible making, older adults.',
   },
   {
-    icon: '🤖',
     title: 'Human–Robot Interaction',
     description: 'Soft robotic companions and floating drones that create affective, physical, and expressive interactions.',
   },
@@ -38,14 +32,13 @@ const areas = [
     <p class="section-label">What we study</p>
     <h2 class="section-title" id="research-heading">Research Areas</h2>
     <p class="section-subtitle">
-      Our work spans the spectrum from fundamental sensing to deployed systems —
+      Our work spans the spectrum from fundamental sensing to deployed systems,
       always centred on the human in the loop.
     </p>
 
     <ul class="research-grid" role="list" aria-label="Research areas">
       {areas.map(area => (
         <li class="research-card">
-          <span class="research-card__icon" aria-hidden="true">{area.icon}</span>
           <h3 class="research-card__title">{area.title}</h3>
           <p class="research-card__desc">{area.description}</p>
         </li>
@@ -75,13 +68,6 @@ const areas = [
   transform: translateY(-4px);
   border-color: var(--color-accent);
   box-shadow: var(--shadow-md);
-}
-
-.research-card__icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: var(--space-sm);
-  line-height: 1;
 }
 
 .research-card__title {

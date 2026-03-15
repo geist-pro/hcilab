@@ -51,15 +51,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </div>
           <div class="team-card__info">
             <span class="team-card__name" style="opacity:0.3">Coming soon</span>
-            <span class="team-card__role" style="opacity:0.3">—</span>
+            <span class="team-card__role" style="opacity:0.3"></span>
           </div>
         </li>
       ))}
     </ul>
 
-    <p class="team-note">
-      To add team members, edit <code>src/data/team.ts</code> and add photos to <code>public/team/</code>.
-    </p>
   </div>
 </section>
 
@@ -132,25 +129,5 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 .team-card__role {
   font-size: var(--text-small);
   color: var(--color-muted);
-}
-
-.team-note {
-  margin-top: var(--space-lg);
-  font-size: var(--text-small);
-  color: var(--color-muted);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-  display: inline-block;
-}
-
-.team-note code {
-  font-family: 'Menlo', monospace;
-  font-size: 0.8125rem;
-  background: var(--color-accent-light);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  color: var(--color-accent);
 }
 </style>

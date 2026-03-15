@@ -12,10 +12,14 @@ export interface TeamMember {
 export const team: TeamMember[] = [
   {
     name: 'Kai Kunze',
-    role: 'Principal Investigator',
+    role: 'Researcher',
     photo: '/team/kai-kunze.jpg',
     url: 'https://kaikunze.de',
   },
-  // Add members below:
-  // { name: 'Jane Doe', role: 'PhD Student', photo: '/team/jane-doe.jpg' },
+  {
+    name: 'Matthias Hoppe',
+    role: 'Researcher',
+    photo: '/team/matthias-hoppe.jpg',
+    url: 'https://scholar.google.com/citations?user=N2Bw-lMAAAAJ',
+  },
 ];
