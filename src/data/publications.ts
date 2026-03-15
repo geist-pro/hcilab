@@ -88,7 +88,7 @@ let _cache: Publication[] | null = null;
 export function getPublications(): Publication[] {
   if (_cache) return _cache;
 
-  const mdPath = resolve(process.cwd(), '../kaikunze.de/kaikunze.de-papers/publications.md');
+  const mdPath = resolve(process.cwd(), 'src/data/publications.md');
   let content: string;
   try {
     content = readFileSync(mdPath, 'utf-8');
