@@ -1,6 +1,6 @@
 # HCI Lab Website
 
-Astro static site for the Human Computer Interaction Lab (Keio SFC).
+Astro static site for the Human Computer Interaction Lab.
 
 ## Commands
 
