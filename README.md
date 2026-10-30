@@ -1,43 +1,18 @@
-# Astro Starter Kit: Minimal
+# hcilab.io → geist.pro
 
-```sh
-npm create astro@latest -- --template minimal
-```
+hcilab.io is retired (30 October 2026). The lab's web site is https://geist.pro/ (source: `geist-pro/new-site`,
+built output: `geist-pro/geist-pro.github.io`).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This repository only keeps the domain forwarding. `site/` is published as is by GitHub Pages
+(`.github/workflows/deploy.yml`, on every push to `main`):
 
-## 🚀 Project Structure
+| hcilab.io address | forwards to |
+|---|---|
+| `/` | `https://geist.pro/` |
+| `/#research`, `/#team`, `/#apply`, `/#publications` | `/research/`, `/people/`, `/join/`, `/publications/` on geist.pro |
+| `/publications/` | `https://geist.pro/publications/` |
+| anything else (`404.html`) | the same path on geist.pro |
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Each page is a meta refresh plus a canonical link (GitHub Pages cannot send a real 301); the JavaScript adds the
+hash and path mapping. The custom domain and its certificate stay configured in the repository's Pages settings
+(`site/CNAME` keeps them on deploy). The old Astro site is in the git history before this commit.
